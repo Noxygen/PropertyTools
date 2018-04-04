@@ -620,6 +620,16 @@ namespace PropertyTools.Wpf
                 pi.ItemsSourceDescriptor = pi.GetDescriptor(ispa.PropertyName);
             }
 
+            if (attribute is ItemsSourceProviderAttribute isp)
+            {
+                pi.ItemsSource = isp.GetValues();
+                if (pi.ItemsSource is IDictionary)
+                {
+                    pi.DisplayMemberPath = "Key";
+                    pi.SelectedValuePath = "Value";
+                }
+            }
+
             var liispa = attribute as ListItemItemsSourcePropertyAttribute;
             if (liispa != null)
             {
