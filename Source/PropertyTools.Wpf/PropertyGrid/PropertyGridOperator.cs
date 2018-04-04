@@ -625,8 +625,8 @@ namespace PropertyTools.Wpf
                 pi.ItemsSource = isp.GetValues();
                 if (pi.ItemsSource is IDictionary)
                 {
-                    pi.DisplayMemberPath = "Key";
-                    pi.SelectedValuePath = "Value";
+                    pi.DisplayMemberPath = isp.SwapKeyAndValue ? "Value" : "Key";
+                    pi.SelectedValuePath = isp.SwapKeyAndValue ? "Key" : "Value";
                 }
             }
 

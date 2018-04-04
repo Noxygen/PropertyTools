@@ -10,23 +10,21 @@
     [AttributeUsage(AttributeTargets.Property)]
     public class ItemsSourceProviderAttribute : Attribute
     {
-        private readonly Dictionary<object, object> _values;
+        private readonly Type _itemsSourceClass;
+
+        public bool SwapKeyAndValue { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ItemsSourceProviderAttribute" /> class.
         /// </summary>
         /// <param name="itemsSourceClass">A class that inherits from <see cref="IItemsSource" />.</param>
-        public ItemsSourceProviderAttribute(Type itemsSourceClass)
+        /// <param name="swapKeyAndValue">Treat items as Value:Key instead of Key:Value.</param>
+        public ItemsSourceProviderAttribute(Type itemsSourceClass, bool swapKeyAndValue = false)
         {
-            var instance = Activator.CreateInstance(itemsSourceClass) as IItemsSource;
-            if (instance == null) throw new ArgumentException($"ItemsSourceProvider must be of {nameof(IItemsSource)} type.");
-
-            _values = instance.GetValues();
+            _itemsSourceClass = itemsSourceClass;
+            SwapKeyAndValue = swapKeyAndValue;
         }
-
-        public Dictionary<object, object> GetValues()
-        {
-            return _values;
-        }
+        
+        public Dictionary<object, object> GetValues() => (Activator.CreateInstance(_itemsSourceClass) as IItemsSource)?.GetValues();
     }
 }
